@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>提示詞 · GPT Image 2 Prompt Library</title>
+<meta name="description" content="精選 {{TOTAL}} 則 GPT Image 2 生圖提示詞，依用途分類，一鍵複製，繁體中文整理。由 chengchieh.huang @ aqualux.dev 整理自 YouMind 與 bnext。">
+<meta name="author" content="Chengchieh Huang">
+<meta name="keywords" content="GPT Image 2, AI 生圖, 提示詞, prompt, ChatGPT, OpenAI, 繁體中文, prompt library, 生成式 AI">
+<link rel="canonical" href="https://prompts.aqualux.dev/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://prompts.aqualux.dev/">
+<meta property="og:title" content="提示詞 · GPT Image 2 Prompt Library">
+<meta property="og:description" content="精選 {{TOTAL}} 則 GPT Image 2 生圖提示詞，依用途分類，一鍵複製。繁體中文整理。">
+<meta property="og:image" content="https://prompts.aqualux.dev/og-image.png">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:site_name" content="aqualux.dev">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="提示詞 · GPT Image 2 Prompt Library">
+<meta name="twitter:description" content="精選 {{TOTAL}} 則 GPT Image 2 生圖提示詞，依用途分類，一鍵複製。">
+<meta name="twitter:image" content="https://prompts.aqualux.dev/og-image.png">
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" href="favicon.ico">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #ffffff;
+    --paper: #fafaf5;
+    --paper-deep: #f3f0e8;
+    --ink: #1a1a1a;
+    --ink-2: #4a4a4a;
+    --ink-3: #8a8a8a;
+    --ink-4: #c8c6c0;
+    --accent: #5c7a9a;
+    --accent-soft: rgba(92, 122, 154, 0.08);
+    --line: #e8e6e0;
+    --line-soft: #f0eee8;
+    --serif: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+    --sans: 'Noto Sans TC', 'PingFang TC', -apple-system, sans-serif;
+    --num: 'Cormorant Garamond', 'Noto Serif TC', serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.7;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { color: var(--accent); }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 140px 40px 80px;
+    text-align: center;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: var(--num);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-3);
+    letter-spacing: 0.08em;
+    margin-bottom: 36px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(72px, 12vw, 128px);
+    letter-spacing: 0.1em;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  .hero-sub {
+    font-family: var(--num);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-2);
+    letter-spacing: 0.05em;
+    margin-bottom: 32px;
+  }
+  .hero-meta {
+    font-family: var(--num);
+    font-size: 14px;
+    color: var(--ink-3);
+    letter-spacing: 0.1em;
+    margin-top: 48px;
+  }
+  .hero-meta strong { color: var(--ink-2); font-weight: 500; }
+
+  /* ---------- Search ---------- */
+  .search-wrap {
+    max-width: 640px;
+    margin: 64px auto 0;
+    padding: 0 24px;
+  }
+  .search {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    padding: 16px 0;
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 300;
+    color: var(--ink);
+    background: transparent;
+    text-align: center;
+    transition: border-color 0.3s ease;
+    outline: none;
+  }
+  .search::placeholder {
+    color: var(--ink-3);
+    font-style: italic;
+    font-family: var(--num);
+    letter-spacing: 0.05em;
+  }
+  .search:focus { border-bottom-color: var(--accent); }
+
+  /* ---------- Nav (category) ---------- */
+  .nav-wrap {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    z-index: 50;
+    margin-top: 96px;
+  }
+  .nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 28px;
+    font-family: var(--serif);
+    font-size: 14.5px;
+  }
+  .nav-link {
+    color: var(--ink-3);
+    padding: 4px 2px;
+    border-bottom: 1px solid transparent;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+  }
+  .nav-link:hover { color: var(--ink); }
+  .nav-link.active {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+  .nav-count {
+    font-family: var(--num);
+    font-size: 11px;
+    color: var(--ink-4);
+    margin-left: 4px;
+    vertical-align: super;
+  }
+
+  /* ---------- Main ---------- */
+  main { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+  .chapter {
+    margin-top: 140px;
+    margin-bottom: 80px;
+    scroll-margin-top: 96px;
+  }
+  .chapter:first-child { margin-top: 80px; }
+  .chapter-head {
+    display: flex;
+    align-items: baseline;
+    gap: 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 64px;
+  }
+  .chapter-han {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 72px;
+    line-height: 1;
+    color: var(--ink-4);
+    letter-spacing: 0.05em;
+  }
+  .chapter-title .zh {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 36px;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+  }
+  .chapter-title .en {
+    font-family: var(--num);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-3);
+    margin-top: 6px;
+    letter-spacing: 0.08em;
+  }
+  .count { color: var(--ink-4); font-family: var(--num); }
+
+  /* ---------- Entry ---------- */
+  .entries {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+  .entry {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 32px;
+    align-items: start;
+    scroll-margin-top: 100px;
+  }
+  .entry.hidden { display: none; }
+  .num {
+    font-family: var(--num);
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--ink-4);
+    line-height: 1;
+    padding-top: 8px;
+    text-align: right;
+    letter-spacing: 0.05em;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .entry-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .src {
+    font-family: var(--num);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-4);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    vertical-align: middle;
+  }
+  .desc {
+    color: var(--ink-2);
+    font-size: 14.5px;
+    margin-bottom: 20px;
+    line-height: 1.75;
+    max-width: 70ch;
+  }
+  .prompt-body {
+    background: var(--paper);
+    padding: 24px 28px;
+    border-left: 2px solid var(--accent);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--ink);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    border-radius: 0;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+  .prompt-body::-webkit-scrollbar { width: 6px; height: 6px; }
+  .prompt-body::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 3px; }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin-bottom: 12px;
+  }
+  .tag {
+    font-family: var(--num);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+  .tag::before { content: '·'; margin-right: 8px; color: var(--ink-4); }
+  .tag:first-child::before { content: ''; margin-right: 0; }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+  .copy-btn {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    color: var(--ink-3);
+    padding: 6px 14px;
+    border: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
+    letter-spacing: 0.1em;
+    transition: all 0.2s ease;
+  }
+  .copy-btn:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+  .copy-btn.copied {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* ---------- No results ---------- */
+  .no-results {
+    text-align: center;
+    padding: 120px 32px;
+    color: var(--ink-3);
+    font-family: var(--serif);
+    font-size: 17px;
+    letter-spacing: 0.05em;
+    display: none;
+  }
+  .no-results.show { display: block; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-top: 200px;
+    padding: 80px 32px 60px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--ink-3);
+  }
+  footer .seal {
+    font-family: var(--num);
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    margin-bottom: 24px;
+  }
+  footer .credits {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    line-height: 1.9;
+    color: var(--ink-2);
+    letter-spacing: 0.03em;
+  }
+  footer .credits a {
+    color: var(--ink-2);
+    border-bottom: 1px solid var(--line);
+  }
+  footer .credits a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  footer .micro {
+    margin-top: 24px;
+    font-family: var(--num);
+    font-size: 11.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.18em;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 720px) {
+    .hero { padding: 80px 24px 48px; }
+    .hero h1 { font-size: clamp(56px, 18vw, 88px); letter-spacing: 0.05em; }
+    .nav { gap: 4px 16px; font-size: 13px; padding: 14px 16px; }
+    .entry { grid-template-columns: 56px 1fr; gap: 16px; }
+    .num { font-size: 32px; }
+    .chapter-head { gap: 20px; }
+    .chapter-han { font-size: 52px; }
+    .chapter-title .zh { font-size: 26px; }
+    .prompt-body { padding: 18px 20px; font-size: 13.5px; }
+    main { padding: 0 20px; }
+    .entries { gap: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<a id="top"></a>
+<section class="hero">
+  <div class="hero-eyebrow">an aqualux.dev library</div>
+  <h1>提示詞</h1>
+  <div class="hero-sub">GPT Image 2 Prompt Library</div>
+  <p style="font-family: var(--serif); color: var(--ink-2); font-size: 16px; max-width: 540px; margin: 0 auto; line-height: 1.9; letter-spacing: 0.03em;">
+    一份精選 <strong style="font-family: var(--num); font-style: italic; font-size: 19px; color: var(--ink);">{{TOTAL}}</strong> 則生圖提示詞的收藏。依用途分章，逐則收錄。複製即用。
+  </p>
+  <div class="hero-meta">
+    Curated by <strong>Chengchieh Huang</strong> &middot; Last updated <strong>{{UPDATED}}</strong>
+  </div>
+  <div class="search-wrap">
+    <input type="search" class="search" id="search" placeholder="搜尋   keyword, tag, or category…" autocomplete="off" spellcheck="false">
+  </div>
+</section>
+
+<div class="nav-wrap">
+  <nav class="nav" id="nav">
+    {{NAV}}
+  </nav>
+</div>
+
+<main>
+  {{CHAPTERS}}
+  <div class="no-results" id="no-results">無相符結果。試試其他關鍵字。</div>
+</main>
+
+<footer>
+  <div class="seal">MMXXVI &middot; AQUALUX.DEV</div>
+  <div class="credits">
+    Curated &amp; designed by <a href="https://aqualux.dev" target="_blank" rel="noopener">Chengchieh Huang</a><br>
+    Source: <a href="https://github.com/YouMind-OpenLab/awesome-gpt-image-2" target="_blank" rel="noopener">YouMind</a> &middot; <a href="https://www.bnext.com.tw/article/90908/chatgpt-image-2-prompt-guide-complete" target="_blank" rel="noopener">bnext</a>
+  </div>
+  <div class="micro">BUILT WITH HUASHU-DESIGN &middot; PRESS / TO SEARCH</div>
+</footer>
+
+<script>
+(function() {
+  const search = document.getElementById('search');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const entries = document.querySelectorAll('.entry');
+  const chapters = document.querySelectorAll('.chapter');
+  const noResults = document.getElementById('no-results');
+  let activeCat = 'all';
+
+  function applyFilter() {
+    const q = (search.value || '').trim().toLowerCase();
+    let visible = 0;
+    entries.forEach(e => {
+      const cat = e.getAttribute('data-cat');
+      const txt = e.getAttribute('data-search');
+      const catMatch = activeCat === 'all' || cat === activeCat;
+      const qMatch = !q || txt.includes(q);
+      const show = catMatch && qMatch;
+      e.classList.toggle('hidden', !show);
+      if (show) visible++;
+    });
+    chapters.forEach(ch => {
+      const hasVisible = ch.querySelectorAll('.entry:not(.hidden)').length > 0;
+      ch.style.display = hasVisible ? '' : 'none';
+    });
+    noResults.classList.toggle('show', visible === 0);
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      const cat = link.getAttribute('data-cat');
+      activeCat = cat;
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+      applyFilter();
+      // smooth scroll handled by browser via href
+    });
+  });
+
+  search.addEventListener('input', applyFilter);
+
+  // Keyboard: '/' to focus search
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      search.focus();
+    }
+    if (e.key === 'Escape' && document.activeElement === search) {
+      search.value = '';
+      applyFilter();
+      search.blur();
+    }
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.getAttribute('data-prompt');
+      try {
+        await navigator.clipboard.writeText(text);
+        const orig = btn.textContent;
+        btn.textContent = '已複製 ✓';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = orig;
+          btn.classList.remove('copied');
+        }, 1800);
+      } catch (err) {
+        // fallback for older browsers / file://
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        const orig = btn.textContent;
+        btn.textContent = '已複製 ✓';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = orig;
+          btn.classList.remove('copied');
+        }, 1800);
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

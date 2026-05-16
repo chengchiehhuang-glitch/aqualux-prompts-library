@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prompt Library · aqualux.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-elevated: #111111;
+    --bg-hover: #1a1a1a;
+    --bg-code: #0f0f10;
+    --border: #27272a;
+    --border-strong: #3f3f46;
+    --text: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    --accent: #5e6ad2;
+    --accent-hover: #7079e0;
+    --accent-bg: rgba(94, 106, 210, 0.1);
+    --accent-border: rgba(94, 106, 210, 0.25);
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --radius-sm: 4px;
+    --radius: 6px;
+    --radius-lg: 8px;
+    --font-sans: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+    --sidebar-w: 240px;
+    --header-h: 56px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  ::selection { background: var(--accent-bg); color: var(--text); }
+
+  /* ====== Layout ====== */
+  .app {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    min-height: 100vh;
+  }
+
+  /* ====== Sidebar ====== */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    padding: 20px 12px;
+    overflow-y: auto;
+    z-index: 20;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 8px 18px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .brand-logo {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, var(--accent), #4c54a8);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 13px;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+  .brand-name { font-weight: 600; font-size: 13px; color: var(--text); }
+  .brand-sub { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+  .nav-section {
+    padding: 0 8px;
+    margin-bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .nav-list { display: flex; flex-direction: column; gap: 1px; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 13px;
+    transition: background 0.12s, color 0.12s;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-item:hover { background: var(--bg-hover); color: var(--text); }
+  .nav-item.active { background: var(--accent-bg); color: var(--text); }
+  .nav-item.active .nav-count { color: var(--accent); }
+
+  .nav-label { display: flex; align-items: center; gap: 8px; }
+  .nav-dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--text-muted);
+  }
+  .nav-item.active .nav-dot { background: var(--accent); }
+
+  .nav-count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ====== Main ====== */
+  .main {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: var(--header-h);
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+  }
+
+  .header-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    flex-shrink: 0;
+  }
+  .header-title .crumb-sep { margin: 0 6px; color: var(--border-strong); }
+  .header-title .crumb-current { color: var(--text); }
+
+  .search {
+    position: relative;
+    flex: 1;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .search-input {
+    width: 100%;
+    height: 32px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    padding: 0 64px 0 32px;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .search-input::placeholder { color: var(--text-muted); }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--border-strong);
+    background: var(--bg-hover);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .search-kbd {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 2px;
+    pointer-events: none;
+  }
+  .kbd {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    line-height: 1.4;
+  }
+
+  .header-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .icon-btn {
+    width: 32px; height: 32px;
+    display: grid; place-items: center;
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    transition: background 0.12s, color 0.12s;
+  }
+  .icon-btn:hover { background: var(--bg-hover); color: var(--text); }
+
+  /* ====== Page content ====== */
+  .content {
+    padding: 28px 24px 80px;
+    max-width: 1400px;
+  }
+
+  .page-head {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .page-title { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .page-desc { color: var(--text-secondary); font-size: 14px; max-width: 640px; }
+
+  .meta-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .meta-row span strong { color: var(--text-secondary); font-weight: 500; }
+
+  /* ====== Cards grid ====== */
+  .results-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 14px;
+  }
+  .results-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .results-count strong { color: var(--text); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 1180px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px)  {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { transform: translateX(-100%); }
+    .main { grid-column: 1; }
+    .grid { grid-template-columns: 1fr; }
+    .header-title { display: none; }
+  }
+
+  .card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .card:hover { border-color: var(--border-strong); }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .card-title-block { min-width: 0; }
+  .card-id {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    letter-spacing: 0.04em;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+  }
+  .card-use {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .card-cat {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-secondary);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 3px 6px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .prompt-block {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    word-break: break-word;
+    white-space: pre-wrap;
+    position: relative;
+  }
+
+  .card-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 3px;
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 5px 9px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .copy-btn.copied {
+    color: var(--success);
+    border-color: var(--success);
+    background: var(--success-bg);
+  }
+  .copy-btn svg { width: 12px; height: 12px; }
+
+  .empty {
+    grid-column: 1 / -1;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  /* ====== Footer ====== */
+  .footer {
+    margin-top: 60px;
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .footer .dot { color: var(--border-strong); margin: 0 6px; }
+
+  /* Mobile fixes */
+  @media (max-width: 768px) {
+    .content { padding: 20px 16px 60px; }
+    .header { padding: 0 16px; }
+    .footer { padding: 20px 16px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">P</div>
+      <div class="brand-text">
+        <span class="brand-name">Prompt Library</span>
+        <span class="brand-sub">by aqualux.dev</span>
+      </div>
+    </div>
+
+    <div class="nav-section">Categories</div>
+    <nav class="nav-list" id="navList"></nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="header">
+      <div class="header-title">
+        prompts<span class="crumb-sep">/</span><span class="crumb-current" id="crumbCurrent">all</span>
+      </div>
+
+      <div class="search">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="20" y1="20" x2="16.65" y2="16.65"></line></svg>
+        <input id="searchInput" class="search-input" type="text" placeholder="搜尋提示詞、用途、tag..." autocomplete="off" spellcheck="false" />
+        <span class="search-kbd"><span class="kbd">⌘</span><span class="kbd">K</span></span>
+      </div>
+
+      <div class="header-actions">
+        <a class="icon-btn" href="#" title="GitHub" aria-label="GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.16-.02-2.11-3.2.69-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.97.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.75.11 3.04.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14 0 1.54-.01 2.79-.01 3.17 0 .31.21.67.8.55C20.21 21.38 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5Z"/></svg>
+        </a>
+        <a class="icon-btn" href="#" title="aqualux.dev" aria-label="aqualux.dev">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </header>
+
+    <div class="content">
+      <section class="page-head">
+        <div class="page-eyebrow">prompt library · v1</div>
+        <h1 class="page-title" id="pageTitle">所有提示詞</h1>
+        <p class="page-desc" id="pageDesc">收錄自《數位時代》× YouMind 整理的 GPT Image 2 提示詞速查。複製即用，依使用情境分類。</p>
+        <div class="meta-row">
+          <span><strong>total</strong> <span id="metaTotal">176</span></span>
+          <span><strong>sample</strong> <span id="metaSample">18</span></span>
+          <span><strong>updated</strong> 2026-05-16</span>
+          <span><strong>source</strong> bnext.com.tw</span>
+        </div>
+      </section>
+
+      <div class="results-bar">
+        <div class="results-count"><strong id="resultCount">18</strong> results</div>
+      </div>
+
+      <div id="grid" class="grid"></div>
+
+      <footer class="footer">
+        <div>© 2026 aqualux.dev<span class="dot">·</span>Curated by Chengchieh Huang<span class="dot">·</span>Source: bnext × YouMind</div>
+        <div>v1.0.0<span class="dot">·</span>build a1b2c3d</div>
+      </footer>
+    </div>
+  </main>
+</div>
+
+<script>
+const data = {
+  "meta": {
+    "title": "GPT Image 2 Prompt Library",
+    "subtitle": "AI 生圖提示詞速查站",
+    "curator": "Chengchieh Huang",
+    "brand": "aqualux.dev",
+    "source": "https://www.bnext.com.tw/article/90908/chatgpt-image-2-prompt-guide-complete",
+    "totalInLibrary": 176,
+    "sampleSize": 18,
+    "lastUpdated": "2026-05-16"
+  },
+  "categories": [
+    {"id": "social", "zh": "品牌社群", "en": "Brand & Social", "count": 15},
+    {"id": "work", "zh": "工作應用", "en": "Work & Professional", "count": 16},
+    {"id": "lifestyle", "zh": "生活實用", "en": "Lifestyle", "count": 10},
+    {"id": "creative", "zh": "靈感創意", "en": "Creative Ideas", "count": 19},
+    {"id": "transform", "zh": "照片風格轉換", "en": "Photo Transform", "count": 11},
+    {"id": "ecommerce", "zh": "電商主圖", "en": "E-commerce", "count": 20},
+    {"id": "avatar", "zh": "頭像", "en": "Profile Avatar", "count": 20},
+    {"id": "infographic", "zh": "資訊圖表", "en": "Infographic", "count": 21}
+  ],
+  "prompts": [
+    {"id":"p01","title":"高質感商品攝影","category":"social","useCase":"電商商品展示・保養品牌官網","lang":"zh","length":"short","tags":["product","premium","natural-light"],"prompt":"請幫我把這個產品製作成高質感商品攝影風格，使用柔和自然光、乾淨背景與簡約構圖，畫面像保養品牌官網，帶有高級生活感與細膩陰影。"},
+    {"id":"p02","title":"資訊型 YouTube 縮圖","category":"social","useCase":"影片平台縮圖・科技工具類","lang":"zh","length":"short","tags":["thumbnail","youtube","high-contrast"],"prompt":"請幫我設計一張資訊型 YouTube 縮圖，主題是 AI 提升工作效率，使用醒目的大字標題、強烈對比色與科技感背景，讓畫面在手機上也容易閱讀。"},
+    {"id":"p03","title":"科技論壇活動海報","category":"social","useCase":"會議論壇宣傳","lang":"zh","length":"short","tags":["poster","black-gold","premium"],"prompt":"請幫我製作一張科技論壇活動海報，使用黑金色調與現代字體，畫面具有高級感與專業感。"},
+    {"id":"p04","title":"顧問公司商業簡報封面","category":"work","useCase":"企業提案・專業簡報","lang":"zh","length":"short","tags":["presentation","corporate","minimal"],"prompt":"請幫我製作一張專業簡報封面，主題是新服務提案，使用簡潔排版、企業感配色與現代曲線設計，畫面像顧問公司或科技企業簡報。"},
+    {"id":"p05","title":"寵物 App Icon 設計","category":"work","useCase":"應用程式識別","lang":"zh","length":"medium","tags":["icon","app","geometric"],"prompt":"請幫我設計一款現代感 App icon，以簡約幾何風格呈現，使用柔和綠色與白色配色，適合寵物養成類型 App，呈現多種功能，寫出設計概念，具有辨識度。"},
+    {"id":"p06","title":"市場調查數據資訊圖","category":"work","useCase":"簡報數據視覺化","lang":"zh","length":"short","tags":["infographic","data","presentation"],"prompt":"請幫我把市場調查數據做成視覺化資訊圖，版面清楚、數據重點明確，適合簡報使用。"},
+    {"id":"p07","title":"文青風咖啡館菜單","category":"lifestyle","useCase":"餐飲品牌・獨立咖啡店","lang":"zh","length":"medium","tags":["menu","cafe","handwritten"],"prompt":"請幫我製作一張文青風咖啡館菜單，版面包含飲品、甜點、價格與簡單插畫。使用奶油色背景、手寫字體、咖啡杯與植物元素，整體乾淨溫暖，像小型獨立咖啡店的紙本菜單。"},
+    {"id":"p08","title":"編織小人氣象圖","category":"lifestyle","useCase":"天氣預報・在地化內容","lang":"zh","length":"medium","tags":["weather","knit","local","viral"],"prompt":"請幫我生成一張【城市名】今日天氣圖，主角是編織風格的可愛小人，背景包含當地代表景點與美食，整體風格溫暖手作感，包含氣溫、天氣狀況與當日穿搭建議。"},
+    {"id":"p09","title":"讀書筆記風","category":"lifestyle","useCase":"學習筆記・知識整理","lang":"zh","length":"medium","tags":["notes","handwritten","study"],"prompt":"請將這張圖片或主題內容轉化為讀書筆記風。整體版面請像一本有質感的學習筆記頁，包含手寫感標題、重點底線、簡單框線、小箭頭、便利貼感區塊與清楚的段落分類。"},
+    {"id":"p10","title":"一週 Habit Tracker","category":"lifestyle","useCase":"生活規劃・自我管理","lang":"zh","length":"short","tags":["tracker","habit","stationery"],"prompt":"請幫我設計一張一週 habit tracker，包含運動、閱讀、喝水、冥想、早睡與學習等欄位。版面簡潔療癒，搭配小圖示與打勾區域，像文具品牌會推出的生活規劃模板。"},
+    {"id":"p11","title":"Q 版 LINE 貼圖角色","category":"creative","useCase":"通訊軟體貼圖・社群互動","lang":"zh","length":"short","tags":["sticker","line","kawaii"],"prompt":"請幫我設計一組 Q 版角色貼圖，角色表情誇張可愛，包含開心、無奈、生氣與驚訝四種情緒，風格簡單乾淨，適合聊天使用。"},
+    {"id":"p12","title":"寵物走出 IG 拍照框","category":"creative","useCase":"社群創意・viral 題材","lang":"zh","length":"medium","tags":["viral","pet","perspective","social"],"prompt":"超可愛【寵物】從巨大 Instagram 拍照框中走出來，前腳超近距離伸向鏡頭，帶有強烈透視感與廣角效果，露出開心微笑與吐舌表情。背景是陽光燦爛的夢幻花園小徑。"},
+    {"id":"p13","title":"Y2K 四格大頭貼","category":"transform","useCase":"千禧懷舊・人像轉換","lang":"zh","length":"medium","tags":["y2k","purikura","retro","viral"],"prompt":"請以這張人像為基礎，生成 Y2K 千禧懷舊風四格大頭貼，每格不同表情/姿勢，搭配迷你閃亮貼紙、星星、愛心、英文/日文短語與螢光粉紅 + 電光藍配色，像 1999 年日本大頭貼機輸出。"},
+    {"id":"p14","title":"日本極道千金/少爺風","category":"transform","useCase":"角色人物設定・人像轉換","lang":"zh","length":"medium","tags":["character","cinematic","japanese"],"prompt":"根據我提供的照片，請保留照片中人物原本的五官特徵、臉型輪廓、神情與辨識度。生成日本黑道電影風格，一位年輕的日本極道千金站在打開的黑色高級轎車車門前。"},
+    {"id":"p15","title":"衝破手機螢幕合成","category":"transform","useCase":"個人品牌・社群衝擊視覺","lang":"zh","length":"medium","tags":["3d","social","viral","composite"],"prompt":"請以這張人像照為基礎，生成「人物衝破手機螢幕」的立體合成，前景人物從巨大手機 UI 中跳出，搭配社群按鈕、emoji 飛濺特效與廣角透視，背景帶有夢幻光暈。"},
+    {"id":"p16","title":"個人形象潑墨插圖","category":"transform","useCase":"頭像・個人風格轉換","lang":"zh","length":"short","tags":["illustration","hand-drawn","ink"],"prompt":"以這張照片為基礎，將人物轉換為日系手繪插圖風。整體風格為手繪塗鴉＋水彩速寫，使用隨性線條與鬆散墨線，帶有漫畫草稿質感與手繪筆觸。"},
+    {"id":"p17","title":"Cinematic Portrait, Editorial Lighting","category":"avatar","useCase":"Profile photo・LinkedIn","lang":"en","length":"short","tags":["portrait","cinematic","editorial"],"prompt":"Cinematic editorial portrait of {subject}, shot on Hasselblad H6D, soft directional studio light from the left, shallow depth of field, neutral grey backdrop, subtle film grain, magazine cover quality."},
+    {"id":"p18","title":"Minimal E-commerce Hero Shot","category":"ecommerce","useCase":"Amazon/Shopify 主圖","lang":"en","length":"short","tags":["product","ecommerce","minimal"],"prompt":"Minimal product hero shot of {product} centered on a soft beige seamless backdrop, three-quarter angle, gentle reflection on glossy surface, controlled studio softbox lighting, premium feel, white space for marketplace listing crop."}
+  ]
+};
+
+// ====== State ======
+const state = {
+  category: 'all',
+  query: ''
+};
+
+// ====== Render sidebar ======
+function renderNav() {
+  const nav = document.getElementById('navList');
+  const items = [
+    { id: 'all', zh: '全部', en: 'All', count: data.prompts.length }
+  ].concat(data.categories);
+
+  nav.innerHTML = items.map(c => `
+    <button class="nav-item ${state.category === c.id ? 'active' : ''}" data-id="${c.id}">
+      <span class="nav-label"><span class="nav-dot"></span>${c.zh}</span>
+      <span class="nav-count">${c.count}</span>
+    </button>
+  `).join('');
+
+  nav.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.category = btn.dataset.id;
+      renderNav();
+      renderPageHead();
+      renderGrid();
+    });
+  });
+}
+
+// ====== Page head ======
+function renderPageHead() {
+  const cat = data.categories.find(c => c.id === state.category);
+  const titleEl = document.getElementById('pageTitle');
+  const crumbEl = document.getElementById('crumbCurrent');
+  const descEl = document.getElementById('pageDesc');
+  const metaTotal = document.getElementById('metaTotal');
+  const metaSample = document.getElementById('metaSample');
+
+  if (cat) {
+    titleEl.textContent = cat.zh;
+    crumbEl.textContent = cat.id;
+    descEl.textContent = `${cat.en} · 此分類底下精選提示詞，可直接複製到 ChatGPT / GPT Image 2 使用。`;
+    metaTotal.textContent = cat.count;
+    metaSample.textContent = data.prompts.filter(p => p.category === cat.id).length;
+  } else {
+    titleEl.textContent = '所有提示詞';
+    crumbEl.textContent = 'all';
+    descEl.textContent = '收錄自《數位時代》× YouMind 整理的 GPT Image 2 提示詞速查。複製即用，依使用情境分類。';
+    metaTotal.textContent = data.meta.totalInLibrary;
+    metaSample.textContent = data.meta.sampleSize;
+  }
+}
+
+// ====== Grid ======
+function filterPrompts() {
+  const q = state.query.trim().toLowerCase();
+  return data.prompts.filter(p => {
+    if (state.category !== 'all' && p.category !== state.category) return false;
+    if (!q) return true;
+    return (
+      p.title.toLowerCase().includes(q) ||
+      p.useCase.toLowerCase().includes(q) ||
+      p.prompt.toLowerCase().includes(q) ||
+      p.tags.some(t => t.toLowerCase().includes(q))
+    );
+  });
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const list = filterPrompts();
+  document.getElementById('resultCount').textContent = list.length;
+
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="empty">// no results · try another keyword</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(p => {
+    const cat = data.categories.find(c => c.id === p.category);
+    return `
+      <article class="card">
+        <div class="card-head">
+          <div class="card-title-block">
+            <div class="card-id">${p.id} · ${p.lang}</div>
+            <h3 class="card-title">${escapeHtml(p.title)}</h3>
+            <div class="card-use">${escapeHtml(p.useCase)}</div>
+          </div>
+          <span class="card-cat">${cat ? cat.id : p.category}</span>
+        </div>
+
+        <div class="prompt-block">${escapeHtml(p.prompt)}</div>
+
+        <div class="card-foot">
+          <div class="tags">${p.tags.map(t => `<span class="tag">#${escapeHtml(t)}</span>`).join('')}</div>
+          <button class="copy-btn" data-id="${p.id}" aria-label="Copy prompt">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  grid.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      const p = data.prompts.find(x => x.id === id);
+      if (!p) return;
+      try {
+        await navigator.clipboard.writeText(p.prompt);
+      } catch (e) {
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = p.prompt;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (_) {}
+        document.body.removeChild(ta);
+      }
+      btn.classList.add('copied');
+      const label = btn.querySelector('.copy-label');
+      const prev = label.textContent;
+      label.textContent = 'Copied';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        label.textContent = prev;
+      }, 1800);
+    });
+  });
+}
+
+// ====== Search ======
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', (e) => {
+  state.query = e.target.value;
+  renderGrid();
+});
+
+// cmd+K / ctrl+K focus
+document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+  if (e.key === 'Escape' && document.activeElement === searchInput) {
+    searchInput.blur();
+  }
+});
+
+// ====== Init ======
+renderNav();
+renderPageHead();
+renderGrid();
+</script>
+</body>
+</html>

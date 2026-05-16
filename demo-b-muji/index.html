@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>提示詞 — GPT Image 2 Prompt Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-paper:#fafaf5;
+    --ink:#1a1a1a;
+    --ink-light:#4a4a4a;
+    --ink-muted:#8a8a8a;
+    --accent:#5c7a9a;
+    --line:#e8e6e0;
+    --font-display:'Noto Serif TC','Source Han Serif','Songti TC',serif;
+    --font-body:'Noto Sans TC','PingFang TC',sans-serif;
+    --font-num:'Cormorant Garamond','Noto Serif TC',serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-weight:300;-webkit-font-smoothing:antialiased;line-height:1.6}
+  ::selection{background:var(--bg-paper);color:var(--ink)}
+
+  /* ---------- Layout shell ---------- */
+  .wrap{max-width:780px;margin:0 auto;padding:0 32px}
+  @media(max-width:640px){.wrap{padding:0 24px}}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:180px 0 140px;text-align:center}
+  .hero .mark{font-family:var(--font-num);font-style:italic;font-weight:300;font-size:14px;letter-spacing:.18em;color:var(--ink-muted);margin-bottom:48px;text-transform:uppercase}
+  .hero h1{font-family:var(--font-display);font-weight:300;font-size:104px;line-height:1.05;letter-spacing:.04em;color:var(--ink);margin-bottom:36px}
+  .hero .en{font-family:var(--font-num);font-style:italic;font-weight:300;font-size:22px;color:var(--ink-light);letter-spacing:.05em;margin-bottom:64px}
+  .hero .meta{font-family:var(--font-body);font-weight:300;font-size:13px;color:var(--ink-muted);letter-spacing:.12em}
+  .hero .meta span{margin:0 12px;color:var(--line)}
+  @media(max-width:640px){
+    .hero{padding:96px 0 80px}
+    .hero h1{font-size:64px}
+    .hero .en{font-size:17px;margin-bottom:48px}
+  }
+
+  /* ---------- Search ---------- */
+  .search{display:flex;justify-content:center;margin-top:56px}
+  .search input{
+    border:none;border-bottom:1px solid var(--line);
+    background:transparent;font-family:var(--font-display);font-weight:300;
+    font-size:15px;color:var(--ink);padding:10px 8px;width:240px;text-align:center;
+    transition:border-color .3s ease,width .3s ease;outline:none;letter-spacing:.05em;
+  }
+  .search input::placeholder{color:var(--ink-muted);font-style:italic;font-family:var(--font-num)}
+  .search input:focus{border-color:var(--ink);width:320px}
+
+  /* ---------- Category nav ---------- */
+  .cats{
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:32px 0;margin:0 0 120px;
+  }
+  .cats-inner{display:flex;flex-wrap:wrap;justify-content:center;gap:36px 44px}
+  .cat{
+    background:none;border:none;cursor:pointer;
+    font-family:var(--font-display);font-weight:300;font-size:15px;
+    color:var(--ink-light);letter-spacing:.08em;padding:6px 0;
+    border-bottom:1px solid transparent;transition:color .3s ease,border-color .3s ease;
+  }
+  .cat .n{font-family:var(--font-num);font-style:italic;font-size:13px;color:var(--ink-muted);margin-left:6px}
+  .cat:hover{color:var(--ink)}
+  .cat.active{color:var(--ink);border-bottom-color:var(--ink)}
+  @media(max-width:640px){.cats-inner{gap:20px 28px}.cat{font-size:13px}}
+
+  /* ---------- Chapter heading ---------- */
+  .chapter{margin:160px 0 100px;text-align:center}
+  .chapter:first-child{margin-top:0}
+  .chapter .num{font-family:var(--font-num);font-style:italic;font-weight:300;font-size:48px;color:var(--ink-muted);letter-spacing:.05em;margin-bottom:24px;line-height:1}
+  .chapter h2{font-family:var(--font-display);font-weight:300;font-size:36px;letter-spacing:.2em;color:var(--ink);margin-bottom:16px}
+  .chapter .sub{font-family:var(--font-num);font-style:italic;font-weight:300;font-size:16px;color:var(--ink-muted);letter-spacing:.08em}
+  .chapter .rule{width:32px;height:1px;background:var(--ink-muted);margin:32px auto 0}
+  @media(max-width:640px){.chapter{margin:96px 0 64px}.chapter h2{font-size:24px}.chapter .num{font-size:36px}}
+
+  /* ---------- Prompt entry ---------- */
+  .entry{margin-top:110px;position:relative}
+  .entry:first-of-type{margin-top:0}
+  .entry .head{display:grid;grid-template-columns:96px 1fr;gap:32px;align-items:baseline;margin-bottom:36px}
+  .entry .numeral{font-family:var(--font-num);font-style:italic;font-weight:300;font-size:88px;line-height:1;color:#dcd8cf;text-align:right;padding-top:8px;letter-spacing:-.02em}
+  .entry .titlebox{padding-top:18px}
+  .entry h3{font-family:var(--font-display);font-weight:400;font-size:26px;letter-spacing:.04em;color:var(--ink);margin-bottom:14px;line-height:1.4}
+  .entry .useCase{font-family:var(--font-display);font-weight:300;font-size:14px;color:var(--ink-light);letter-spacing:.06em;margin-bottom:14px}
+  .entry .tags{display:flex;flex-wrap:wrap;gap:18px;font-family:var(--font-num);font-style:italic;font-size:12px;color:var(--ink-muted);letter-spacing:.05em}
+  .entry .tags span::before{content:"—  ";color:var(--line)}
+  .entry .tags span:first-child::before{content:""}
+
+  .entry .body{
+    background:var(--bg-paper);padding:56px 64px;margin-left:128px;
+    font-family:var(--font-body);font-weight:300;font-size:15.5px;line-height:1.95;
+    color:var(--ink);letter-spacing:.02em;position:relative;
+  }
+  .entry .body p{margin-bottom:0}
+  .entry .body[data-lang=en]{font-family:var(--font-num);font-style:italic;font-size:17px;letter-spacing:.01em}
+
+  .entry .actions{display:flex;justify-content:flex-end;align-items:center;gap:24px;margin-top:18px;margin-left:128px}
+  .entry .accent-mark{width:24px;height:1px;background:var(--accent);opacity:.6}
+  .copy{
+    background:none;border:none;cursor:pointer;
+    font-family:var(--font-display);font-weight:300;font-size:13px;
+    color:var(--ink-muted);letter-spacing:.18em;padding:4px 0;
+    transition:color .4s ease;
+  }
+  .copy:hover{color:var(--ink)}
+  .copy.copied{color:var(--accent)}
+
+  .entry .divider{margin-top:90px;height:1px;background:var(--line);max-width:64px;margin-left:auto;margin-right:auto}
+  .entry:last-child .divider{display:none}
+
+  @media(max-width:640px){
+    .entry{margin-top:72px}
+    .entry .head{grid-template-columns:48px 1fr;gap:18px;margin-bottom:24px}
+    .entry .numeral{font-size:52px;padding-top:6px}
+    .entry .titlebox{padding-top:10px}
+    .entry h3{font-size:20px}
+    .entry .body{margin-left:0;padding:32px 28px;font-size:14.5px;line-height:1.9}
+    .entry .actions{margin-left:0}
+    .entry .divider{margin-top:64px}
+  }
+
+  /* ---------- Empty ---------- */
+  .empty{
+    text-align:center;padding:140px 0;color:var(--ink-muted);
+    font-family:var(--font-display);font-weight:300;font-size:15px;letter-spacing:.15em;
+  }
+  .empty .num{font-family:var(--font-num);font-style:italic;font-size:48px;color:var(--ink-muted);margin-bottom:20px;letter-spacing:.05em}
+
+  /* ---------- Footer ---------- */
+  footer{margin-top:200px;padding:80px 0 120px;text-align:center;border-top:1px solid var(--line)}
+  footer .seal{font-family:var(--font-num);font-style:italic;font-weight:300;font-size:14px;color:var(--ink-muted);letter-spacing:.15em;margin-bottom:18px}
+  footer .line{font-family:var(--font-display);font-weight:300;font-size:13px;color:var(--ink-light);letter-spacing:.18em}
+  footer .line span{margin:0 14px;color:var(--line)}
+  footer .year{font-family:var(--font-num);font-style:italic;font-size:13px;color:var(--ink-muted);letter-spacing:.1em;margin-top:18px}
+  @media(max-width:640px){
+    footer{margin-top:120px;padding:56px 0 80px}
+    footer .line{font-size:11px;letter-spacing:.12em}
+    footer .line span{margin:0 8px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <div class="mark">No. 001 / Curated Library</div>
+  <h1>提示詞</h1>
+  <div class="en">GPT Image 2 Prompt Library</div>
+  <div class="meta">
+    精選 <span>·</span> 一百七十六則 <span>·</span> 由 Chengchieh Huang 整理
+  </div>
+  <div class="search">
+    <input type="text" id="q" placeholder="search · 搜尋一則提示詞" aria-label="搜尋" />
+  </div>
+</header>
+
+<nav class="cats">
+  <div class="cats-inner wrap" id="catNav"></div>
+</nav>
+
+<main class="wrap" id="list"></main>
+
+<footer>
+  <div class="seal">aqualux.dev</div>
+  <div class="line">
+    Curated by Chengchieh Huang <span>·</span> Source · bnext × YouMind <span>·</span> Updated 2026.05
+  </div>
+  <div class="year">MMXXVI</div>
+</footer>
+
+<script>
+/* Inline data (CORS-safe for file://) */
+const data = {
+  "meta":{"title":"GPT Image 2 Prompt Library","subtitle":"AI 生圖提示詞速查站","curator":"Chengchieh Huang","brand":"aqualux.dev","totalInLibrary":176,"sampleSize":18,"lastUpdated":"2026-05-16"},
+  "categories":[
+    {"id":"social","zh":"品牌社群","en":"Brand & Social","count":15},
+    {"id":"work","zh":"工作應用","en":"Work & Professional","count":16},
+    {"id":"lifestyle","zh":"生活實用","en":"Lifestyle","count":10},
+    {"id":"creative","zh":"靈感創意","en":"Creative Ideas","count":19},
+    {"id":"transform","zh":"照片風格轉換","en":"Photo Transform","count":11},
+    {"id":"ecommerce","zh":"電商主圖","en":"E-commerce","count":20},
+    {"id":"avatar","zh":"頭像","en":"Profile Avatar","count":20},
+    {"id":"infographic","zh":"資訊圖表","en":"Infographic","count":21}
+  ],
+  "prompts":[
+    {"id":"p01","title":"高質感商品攝影","category":"social","useCase":"電商商品展示・保養品牌官網","lang":"zh","tags":["product","premium","natural-light"],"prompt":"請幫我把這個產品製作成高質感商品攝影風格，使用柔和自然光、乾淨背景與簡約構圖，畫面像保養品牌官網，帶有高級生活感與細膩陰影。"},
+    {"id":"p02","title":"資訊型 YouTube 縮圖","category":"social","useCase":"影片平台縮圖・科技工具類","lang":"zh","tags":["thumbnail","youtube","high-contrast"],"prompt":"請幫我設計一張資訊型 YouTube 縮圖，主題是 AI 提升工作效率，使用醒目的大字標題、強烈對比色與科技感背景，讓畫面在手機上也容易閱讀。"},
+    {"id":"p03","title":"科技論壇活動海報","category":"social","useCase":"會議論壇宣傳","lang":"zh","tags":["poster","black-gold","premium"],"prompt":"請幫我製作一張科技論壇活動海報，使用黑金色調與現代字體，畫面具有高級感與專業感。"},
+    {"id":"p04","title":"顧問公司商業簡報封面","category":"work","useCase":"企業提案・專業簡報","lang":"zh","tags":["presentation","corporate","minimal"],"prompt":"請幫我製作一張專業簡報封面，主題是新服務提案，使用簡潔排版、企業感配色與現代曲線設計，畫面像顧問公司或科技企業簡報。"},
+    {"id":"p05","title":"寵物 App Icon 設計","category":"work","useCase":"應用程式識別","lang":"zh","tags":["icon","app","geometric"],"prompt":"請幫我設計一款現代感 App icon，以簡約幾何風格呈現，使用柔和綠色與白色配色，適合寵物養成類型 App，呈現多種功能，寫出設計概念，具有辨識度。"},
+    {"id":"p06","title":"市場調查數據資訊圖","category":"work","useCase":"簡報數據視覺化","lang":"zh","tags":["infographic","data","presentation"],"prompt":"請幫我把市場調查數據做成視覺化資訊圖，版面清楚、數據重點明確，適合簡報使用。"},
+    {"id":"p07","title":"文青風咖啡館菜單","category":"lifestyle","useCase":"餐飲品牌・獨立咖啡店","lang":"zh","tags":["menu","cafe","handwritten"],"prompt":"請幫我製作一張文青風咖啡館菜單，版面包含飲品、甜點、價格與簡單插畫。使用奶油色背景、手寫字體、咖啡杯與植物元素，整體乾淨溫暖，像小型獨立咖啡店的紙本菜單。"},
+    {"id":"p08","title":"編織小人氣象圖","category":"lifestyle","useCase":"天氣預報・在地化內容","lang":"zh","tags":["weather","knit","local","viral"],"prompt":"請幫我生成一張【城市名】今日天氣圖，主角是編織風格的可愛小人，背景包含當地代表景點與美食，整體風格溫暖手作感，包含氣溫、天氣狀況與當日穿搭建議。"},
+    {"id":"p09","title":"讀書筆記風","category":"lifestyle","useCase":"學習筆記・知識整理","lang":"zh","tags":["notes","handwritten","study"],"prompt":"請將這張圖片或主題內容轉化為讀書筆記風。整體版面請像一本有質感的學習筆記頁，包含手寫感標題、重點底線、簡單框線、小箭頭、便利貼感區塊與清楚的段落分類。"},
+    {"id":"p10","title":"一週 Habit Tracker","category":"lifestyle","useCase":"生活規劃・自我管理","lang":"zh","tags":["tracker","habit","stationery"],"prompt":"請幫我設計一張一週 habit tracker，包含運動、閱讀、喝水、冥想、早睡與學習等欄位。版面簡潔療癒，搭配小圖示與打勾區域，像文具品牌會推出的生活規劃模板。"},
+    {"id":"p11","title":"Q 版 LINE 貼圖角色","category":"creative","useCase":"通訊軟體貼圖・社群互動","lang":"zh","tags":["sticker","line","kawaii"],"prompt":"請幫我設計一組 Q 版角色貼圖，角色表情誇張可愛，包含開心、無奈、生氣與驚訝四種情緒，風格簡單乾淨，適合聊天使用。"},
+    {"id":"p12","title":"寵物走出 IG 拍照框","category":"creative","useCase":"社群創意・viral 題材","lang":"zh","tags":["viral","pet","perspective","social"],"prompt":"超可愛【寵物】從巨大 Instagram 拍照框中走出來，前腳超近距離伸向鏡頭，帶有強烈透視感與廣角效果，露出開心微笑與吐舌表情。背景是陽光燦爛的夢幻花園小徑。"},
+    {"id":"p13","title":"Y2K 四格大頭貼","category":"transform","useCase":"千禧懷舊・人像轉換","lang":"zh","tags":["y2k","purikura","retro","viral"],"prompt":"請以這張人像為基礎，生成 Y2K 千禧懷舊風四格大頭貼，每格不同表情/姿勢，搭配迷你閃亮貼紙、星星、愛心、英文/日文短語與螢光粉紅 + 電光藍配色，像 1999 年日本大頭貼機輸出。"},
+    {"id":"p14","title":"日本極道千金/少爺風","category":"transform","useCase":"角色人物設定・人像轉換","lang":"zh","tags":["character","cinematic","japanese"],"prompt":"根據我提供的照片，請保留照片中人物原本的五官特徵、臉型輪廓、神情與辨識度。生成日本黑道電影風格，一位年輕的日本極道千金站在打開的黑色高級轎車車門前。"},
+    {"id":"p15","title":"衝破手機螢幕合成","category":"transform","useCase":"個人品牌・社群衝擊視覺","lang":"zh","tags":["3d","social","viral","composite"],"prompt":"請以這張人像照為基礎，生成「人物衝破手機螢幕」的立體合成，前景人物從巨大手機 UI 中跳出，搭配社群按鈕、emoji 飛濺特效與廣角透視，背景帶有夢幻光暈。"},
+    {"id":"p16","title":"個人形象潑墨插圖","category":"transform","useCase":"頭像・個人風格轉換","lang":"zh","tags":["illustration","hand-drawn","ink"],"prompt":"以這張照片為基礎，將人物轉換為日系手繪插圖風。整體風格為手繪塗鴉＋水彩速寫，使用隨性線條與鬆散墨線，帶有漫畫草稿質感與手繪筆觸。"},
+    {"id":"p17","title":"Cinematic Portrait, Editorial Lighting","category":"avatar","useCase":"Profile photo・LinkedIn","lang":"en","tags":["portrait","cinematic","editorial"],"prompt":"Cinematic editorial portrait of {subject}, shot on Hasselblad H6D, soft directional studio light from the left, shallow depth of field, neutral grey backdrop, subtle film grain, magazine cover quality."},
+    {"id":"p18","title":"Minimal E-commerce Hero Shot","category":"ecommerce","useCase":"Amazon/Shopify 主圖","lang":"en","tags":["product","ecommerce","minimal"],"prompt":"Minimal product hero shot of {product} centered on a soft beige seamless backdrop, three-quarter angle, gentle reflection on glossy surface, controlled studio softbox lighting, premium feel, white space for marketplace listing crop."}
+  ]
+};
+
+/* ---------- Helpers ---------- */
+const HAN_NUM = ["零","壹","貳","參","肆","伍","陸","柒","捌","玖","拾"];
+function hanNum(n){
+  if(n<=10) return HAN_NUM[n];
+  if(n<20) return "拾"+HAN_NUM[n-10];
+  const t=Math.floor(n/10), o=n%10;
+  return HAN_NUM[t]+"拾"+(o?HAN_NUM[o]:"");
+}
+function romanLower(n){
+  const map=[[10,"x"],[9,"ix"],[5,"v"],[4,"iv"],[1,"i"]];
+  let r="";for(const[v,s]of map){while(n>=v){r+=s;n-=v;}}return r;
+}
+
+let state = { cat: "all", q: "" };
+
+/* ---------- Render category nav ---------- */
+function renderCats(){
+  const nav = document.getElementById("catNav");
+  const total = data.prompts.length;
+  const cats = [{id:"all",zh:"全部",en:"All",count:total},...data.categories];
+  nav.innerHTML = cats.map(c=>{
+    const inSample = c.id==="all" ? total : data.prompts.filter(p=>p.category===c.id).length;
+    return `<button class="cat ${state.cat===c.id?"active":""}" data-id="${c.id}">${c.zh}<span class="n">${String(inSample).padStart(2,"0")}</span></button>`;
+  }).join("");
+  nav.querySelectorAll(".cat").forEach(b=>{
+    b.addEventListener("click",()=>{
+      state.cat = b.dataset.id;
+      renderCats();
+      renderList();
+      const m = document.getElementById("list");
+      window.scrollTo({top: m.offsetTop - 32, behavior:"smooth"});
+    });
+  });
+}
+
+/* ---------- Render list ---------- */
+function renderList(){
+  const main = document.getElementById("list");
+  const q = state.q.trim().toLowerCase();
+  let prompts = data.prompts.filter(p=>{
+    if(state.cat!=="all" && p.category!==state.cat) return false;
+    if(!q) return true;
+    return (p.title+p.useCase+p.prompt+p.tags.join(" ")).toLowerCase().includes(q);
+  });
+
+  if(prompts.length===0){
+    main.innerHTML = `<div class="empty"><div class="num">∅</div>未尋得相應之詞</div>`;
+    return;
+  }
+
+  /* Group by category for chapter rhythm */
+  const groups = {};
+  for(const p of prompts){ (groups[p.category] = groups[p.category] || []).push(p); }
+  const catOrder = data.categories.map(c=>c.id).filter(id=>groups[id]);
+
+  let html = "";
+  let chapterIdx = 0;
+  let entryIdx = 0;
+  for(const cid of catOrder){
+    const catMeta = data.categories.find(c=>c.id===cid);
+    chapterIdx++;
+    html += `
+      <section class="chapter">
+        <div class="num">${romanLower(chapterIdx)}.</div>
+        <h2>${catMeta.zh}</h2>
+        <div class="sub">${catMeta.en}</div>
+        <div class="rule"></div>
+      </section>
+    `;
+    for(const p of groups[cid]){
+      entryIdx++;
+      const numeral = hanNum(entryIdx);
+      const tags = p.tags.map(t=>`<span>${t}</span>`).join("");
+      html += `
+        <article class="entry" id="${p.id}">
+          <div class="head">
+            <div class="numeral">${numeral}</div>
+            <div class="titlebox">
+              <h3>${p.title}</h3>
+              <div class="useCase">${p.useCase}</div>
+              <div class="tags">${tags}</div>
+            </div>
+          </div>
+          <div class="body" data-lang="${p.lang}"><p>${p.prompt}</p></div>
+          <div class="actions">
+            <span class="accent-mark"></span>
+            <button class="copy" data-id="${p.id}">複製</button>
+          </div>
+          <div class="divider"></div>
+        </article>
+      `;
+    }
+  }
+
+  main.innerHTML = html;
+
+  /* Copy */
+  main.querySelectorAll(".copy").forEach(btn=>{
+    btn.addEventListener("click", async ()=>{
+      const p = data.prompts.find(x=>x.id===btn.dataset.id);
+      if(!p) return;
+      try{
+        await navigator.clipboard.writeText(p.prompt);
+        btn.textContent = "已複製";
+        btn.classList.add("copied");
+        setTimeout(()=>{ btn.textContent="複製"; btn.classList.remove("copied"); }, 1800);
+      }catch(e){
+        btn.textContent = "請手動複製";
+        setTimeout(()=>{ btn.textContent="複製"; }, 1800);
+      }
+    });
+  });
+}
+
+/* ---------- Search ---------- */
+document.getElementById("q").addEventListener("input", e=>{
+  state.q = e.target.value;
+  renderList();
+});
+
+/* ---------- Init ---------- */
+renderCats();
+renderList();
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+{
+  "meta": {
+    "title": "GPT Image 2 Prompt Library",
+    "subtitle": "AI 生圖提示詞速查站",
+    "curator": "Chengchieh Huang",
+    "brand": "aqualux.dev",
+    "source": "https://www.bnext.com.tw/article/90908/chatgpt-image-2-prompt-guide-complete",
+    "totalInLibrary": 176,
+    "sampleSize": 18,
+    "lastUpdated": "2026-05-16"
+  },
+  "categories": [
+    {"id": "social", "zh": "品牌社群", "en": "Brand & Social", "count": 15},
+    {"id": "work", "zh": "工作應用", "en": "Work & Professional", "count": 16},
+    {"id": "lifestyle", "zh": "生活實用", "en": "Lifestyle", "count": 10},
+    {"id": "creative", "zh": "靈感創意", "en": "Creative Ideas", "count": 19},
+    {"id": "transform", "zh": "照片風格轉換", "en": "Photo Transform", "count": 11},
+    {"id": "ecommerce", "zh": "電商主圖", "en": "E-commerce", "count": 20},
+    {"id": "avatar", "zh": "頭像", "en": "Profile Avatar", "count": 20},
+    {"id": "infographic", "zh": "資訊圖表", "en": "Infographic", "count": 21}
+  ],
+  "prompts": [
+    {
+      "id": "p01",
+      "title": "高質感商品攝影",
+      "category": "social",
+      "useCase": "電商商品展示・保養品牌官網",
+      "lang": "zh",
+      "length": "short",
+      "tags": ["product", "premium", "natural-light"],
+      "prompt": "請幫我把這個產品製作成高質感商品攝影風格，使用柔和自然光、乾淨背景與簡約構圖，畫面像保養品牌官網，帶有高級生活感與細膩陰影。"
+    },
+    {
+      "id": "p02",
+      "title": "資訊型 YouTube 縮圖",
+      "category": "social",
+      "useCase": "影片平台縮圖・科技工具類",
+      "lang": "zh",
+      "length": "short",
+      "tags": ["thumbnail", "youtube", "high-contrast"],
+      "prompt": "請幫我設計一張資訊型 YouTube 縮圖，主題是 AI 提升工作效率，使用醒目的大字標題、強烈對比色與科技感背景，讓畫面在手機上也容易閱讀。"
+    },
+    {
+      "id": "p03",
+      "title": "科技論壇活動海報",
+      "category": "social",
+      "useCase": "會議論壇宣傳",
+      "lang": "zh",
+      "length": "short",
+      "tags": ["poster", "black-gold", "premium"],
+      "prompt": "請幫我製作一張科技論壇活動海報，使用黑金色調與現代字體，畫面具有高級感與專業感。"
+    },
+    {
+      "id": "p04",
+      "title": "顧問公司商業簡報封面",
+      "category": "work",
+      "useCase": "企業提案・專業簡報",
+      "lang": "zh",
+      "length": "short",
+      "tags": ["presentation", "corporate", "minimal"],
+      "prompt": "請幫我製作一張專業簡報封面，主題是新服務提案，使用簡潔排版、企業感配色與現代曲線設計，畫面像顧問公司或科技企業簡報。"
+    },
+    {
+      "id": "p05",
+      "title": "寵物 App Icon 設計",
+      "category": "work",
+      "useCase": "應用程式識別",
+      "lang": "zh",
+      "length": "medium",
+      "tags": ["icon", "app", "geometric"],
+      "prompt": "請幫我設計一款現代感 App icon，以簡約幾何風格呈現，使用柔和綠色與白色配色，適合寵物養成類型 App，呈現多種功能，寫出設計概念，具有辨識度。"
+    },
+    {
+      "id": "p06",
+      "title": "市場調查數據資訊圖",
+      "category": "work",
+      "useCase": "簡報數據視覺化",
+      "lang": "zh",
+      "length": "short",
+      "tags": ["infographic", "data", "presentation"],
+      "prompt": "請幫我把市場調查數據做成視覺化資訊圖，版面清楚、數據重點明確，適合簡報使用。"
+    },
+    {
+      "id": "p07",
+      "title": "文青風咖啡館菜單",
+      "category": "lifestyle",
+      "useCase": "餐飲品牌・獨立咖啡店",
+      "lang": "zh",
+      "length": "medium",
+      "tags": ["menu", "cafe", "handwritten"],
+      "prompt": "請幫我製作一張文青風咖啡館菜單，版面包含飲品、甜點、價格與簡單插畫。使用奶油色背景、手寫字體、咖啡杯與植物元素，整體乾淨溫暖，像小型獨立咖啡店的紙本菜單。"
+    },
+    {
+      "id": "p08",
+      "title": "編織小人氣象圖",
+      "category": "lifestyle",
+      "useCase": "天氣預報・在地化內容",
+      "lang": "zh",
+      "length": "medium",
+      "tags": ["weather", "knit", "local", "viral"],
+      "prompt": "請幫我生成一張【城市名】今日天氣圖，主角是編織風格的可愛小人，背景包含當地代表景點與美食，整體風格溫暖手作感，包含氣溫、天氣狀況與當日穿搭建議。"
+    },
+    {
+      "id": "p09",
+      "title": "讀書筆記風",
+      "category": "lifestyle",
+      "useCase": "學習筆記・知識整理",
+      "lang": "zh",
+      "length": "medium",
+      "tags": ["notes", "handwritten", "study"],
+      "prompt": "請將這張圖片或主題內容轉化為讀書筆記風。整體版面請像一本有質感的學習筆記頁，包含手寫感標題、重點底線、簡單框線、小箭頭、便利貼感區塊與清楚的段落分類。"
+    },
+    {
+      "id": "p10",
+      "title": "一週 Habit Tracker",
+      "category": "lifestyle",
+      "useCase": "生活規劃・自我管理",
+      "lang": "zh",
+      "length": "short",
+      "tags": ["tracker", "habit", "stationery"],
+      "prompt": "請幫我設計一張一週 habit tracker，包含運動、閱讀、喝水、冥想、早睡與學習等欄位。版面簡潔療癒，搭配小圖示與打勾區域，像文具品牌會推出的生活規劃模板。"
+    },
+    {
+      "id": "p11",
+      "title": "Q 版 LINE 貼圖角色",
+      "category": "creative",
+      "useCase": "通訊軟體貼圖・社群互動",
+      "lang": "zh",
+      "length": "short",
+      "tags": ["sticker", "line", "kawaii"],
+      "prompt": "請幫我設計一組 Q 版角色貼圖，角色表情誇張可愛，包含開心、無奈、生氣與驚訝四種情緒，風格簡單乾淨，適合聊天使用。"
+    },
+    {
+      "id": "p12",
+      "title": "寵物走出 IG 拍照框",
+      "category": "creative",
+      "useCase": "社群創意・viral 題材",
+      "lang": "zh",
+      "length": "medium",
+      "tags": ["viral", "pet", "perspective", "social"],
+      "prompt": "超可愛【寵物】從巨大 Instagram 拍照框中走出來，前腳超近距離伸向鏡頭，帶有強烈透視感與廣角效果，露出開心微笑與吐舌表情。背景是陽光燦爛的夢幻花園小徑。"
+    },
+    {
+      "id": "p13",
+      "title": "Y2K 四格大頭貼",
+      "category": "transform",
+      "useCase": "千禧懷舊・人像轉換",
+      "lang": "zh",
+      "length": "medium",
+      "tags": ["y2k", "purikura", "retro", "viral"],
+      "prompt": "請以這張人像為基礎，生成 Y2K 千禧懷舊風四格大頭貼，每格不同表情/姿勢，搭配迷你閃亮貼紙、星星、愛心、英文/日文短語與螢光粉紅 + 電光藍配色，像 1999 年日本大頭貼機輸出。"
+    },
+    {
+      "id": "p14",
+      "title": "日本極道千金/少爺風",
+      "category": "transform",
+      "useCase": "角色人物設定・人像轉換",
+      "lang": "zh",
+      "length": "medium",
+      "tags": ["character", "cinematic", "japanese"],
+      "prompt": "根據我提供的照片，請保留照片中人物原本的五官特徵、臉型輪廓、神情與辨識度。生成日本黑道電影風格，一位年輕的日本極道千金站在打開的黑色高級轎車車門前。"
+    },
+    {
+      "id": "p15",
+      "title": "衝破手機螢幕合成",
+      "category": "transform",
+      "useCase": "個人品牌・社群衝擊視覺",
+      "lang": "zh",
+      "length": "medium",
+      "tags": ["3d", "social", "viral", "composite"],
+      "prompt": "請以這張人像照為基礎，生成「人物衝破手機螢幕」的立體合成，前景人物從巨大手機 UI 中跳出，搭配社群按鈕、emoji 飛濺特效與廣角透視，背景帶有夢幻光暈。"
+    },
+    {
+      "id": "p16",
+      "title": "個人形象潑墨插圖",
+      "category": "transform",
+      "useCase": "頭像・個人風格轉換",
+      "lang": "zh",
+      "length": "short",
+      "tags": ["illustration", "hand-drawn", "ink"],
+      "prompt": "以這張照片為基礎，將人物轉換為日系手繪插圖風。整體風格為手繪塗鴉＋水彩速寫，使用隨性線條與鬆散墨線，帶有漫畫草稿質感與手繪筆觸。"
+    },
+    {
+      "id": "p17",
+      "title": "Cinematic Portrait, Editorial Lighting",
+      "category": "avatar",
+      "useCase": "Profile photo・LinkedIn",
+      "lang": "en",
+      "length": "short",
+      "tags": ["portrait", "cinematic", "editorial"],
+      "prompt": "Cinematic editorial portrait of {subject}, shot on Hasselblad H6D, soft directional studio light from the left, shallow depth of field, neutral grey backdrop, subtle film grain, magazine cover quality."
+    },
+    {
+      "id": "p18",
+      "title": "Minimal E-commerce Hero Shot",
+      "category": "ecommerce",
+      "useCase": "Amazon/Shopify 主圖",
+      "lang": "en",
+      "length": "short",
+      "tags": ["product", "ecommerce", "minimal"],
+      "prompt": "Minimal product hero shot of {product} centered on a soft beige seamless backdrop, three-quarter angle, gentle reflection on glossy surface, controlled studio softbox lighting, premium feel, white space for marketplace listing crop."
+    }
+  ]
+}
