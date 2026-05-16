@@ -14,6 +14,34 @@ def esc(s: str) -> str:
     return html.escape(s or '', quote=True)
 
 
+# Match {argument name="X" default="Y"} after HTML escaping (" → &quot;).
+# After html.escape, the prompt has &quot; in place of ".
+ARG_RE = re.compile(r'\{argument\s+name=&quot;([^&]+?)&quot;\s+default=&quot;([^&]*?)&quot;\}')
+# Chinese full-width bracket placeholders like 【城市名】
+CN_BRACKET_RE = re.compile(r'【([^】\n]{1,20})】')
+
+
+def render_fillable_prompt(escaped_prompt: str) -> str:
+    """Convert {argument} templates and 【XXX】 brackets into editable spans."""
+    def repl_arg(m):
+        name = m.group(1)
+        default = m.group(2)
+        return (
+            f'<span class="arg" data-arg="{name}" data-default="{default}" '
+            f'contenteditable="true" spellcheck="false">{default}</span>'
+        )
+    out = ARG_RE.sub(repl_arg, escaped_prompt)
+
+    def repl_cn(m):
+        word = m.group(1)
+        return (
+            f'<span class="arg" data-arg="{word}" data-default="{word}" '
+            f'contenteditable="true" spellcheck="false">{word}</span>'
+        )
+    out = CN_BRACKET_RE.sub(repl_cn, out)
+    return out
+
+
 def render_prompt_card(p: dict, idx: int) -> str:
     tags_html = ''
     if p.get('tags'):
@@ -32,8 +60,10 @@ def render_prompt_card(p: dict, idx: int) -> str:
       <div class="preview-caption">示範圖 · GPT Image 2 生成</div>
     </div>'''
 
-    # Encode prompt for data-attribute (will be read by JS, not displayed via HTML)
+    # Build prompt body with fillable spans for {argument} / 【XXX】 templates.
+    # Fallback data-prompt keeps the original raw text for any edge case.
     prompt_for_attr = html.escape(p['prompt'], quote=True)
+    prompt_body = render_fillable_prompt(esc(p['prompt']))
 
     return f'''<article class="entry" data-cat="{esc(p['category_en'])}" data-search="{esc((p['title'] + ' ' + (p.get('description', '') or '') + ' ' + ' '.join(p.get('tags', []))).lower())}">
   <div class="num">{idx:03d}</div>
@@ -41,7 +71,7 @@ def render_prompt_card(p: dict, idx: int) -> str:
     <h3 class="entry-title">{esc(p['title'])} <span class="src">{src_label}</span></h3>
     {desc_html}
     {preview_html}
-    <pre class="prompt-body">{esc(p['prompt'])}</pre>
+    <pre class="prompt-body">{prompt_body}</pre>
     {tags_html}
     <div class="actions">
       <button class="copy-btn" data-prompt="{prompt_for_attr}" aria-label="複製提示詞">複製 ↗</button>

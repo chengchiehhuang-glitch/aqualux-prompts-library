@@ -180,18 +180,18 @@
   main { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
 
   .chapter {
-    margin-top: 140px;
-    margin-bottom: 80px;
+    margin-top: 96px;
+    margin-bottom: 56px;
     scroll-margin-top: 96px;
   }
-  .chapter:first-child { margin-top: 80px; }
+  .chapter:first-child { margin-top: 64px; }
   .chapter-head {
     display: flex;
     align-items: baseline;
-    gap: 32px;
-    padding-bottom: 28px;
+    gap: 28px;
+    padding-bottom: 20px;
     border-bottom: 1px solid var(--line);
-    margin-bottom: 64px;
+    margin-bottom: 48px;
   }
   .chapter-han {
     font-family: var(--serif);
@@ -222,23 +222,23 @@
   .entries {
     display: flex;
     flex-direction: column;
-    gap: 80px;
+    gap: 48px;
   }
   .entry {
     display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 32px;
+    grid-template-columns: 64px 1fr;
+    gap: 24px;
     align-items: start;
     scroll-margin-top: 100px;
   }
   .entry.hidden { display: none; }
   .num {
     font-family: var(--num);
-    font-size: 42px;
+    font-size: 32px;
     font-weight: 300;
     color: var(--ink-4);
     line-height: 1;
-    padding-top: 8px;
+    padding-top: 6px;
     text-align: right;
     letter-spacing: 0.05em;
     font-feature-settings: "lnum" 1, "tnum" 1;
@@ -247,10 +247,10 @@
   .entry-title {
     font-family: var(--serif);
     font-weight: 500;
-    font-size: 22px;
+    font-size: 19px;
     letter-spacing: 0.03em;
     color: var(--ink);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     line-height: 1.4;
   }
   .src {
@@ -264,14 +264,14 @@
   }
   .desc {
     color: var(--ink-2);
-    font-size: 14.5px;
-    margin-bottom: 20px;
-    line-height: 1.75;
+    font-size: 13.5px;
+    margin-bottom: 12px;
+    line-height: 1.7;
     max-width: 70ch;
   }
   .preview {
-    margin-bottom: 18px;
-    max-width: 320px;
+    margin-bottom: 12px;
+    max-width: 260px;
   }
   .preview img {
     display: block;
@@ -288,29 +288,63 @@
   .preview-caption {
     font-family: var(--num);
     font-style: italic;
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--ink-3);
-    margin-top: 6px;
+    margin-top: 4px;
     letter-spacing: 0.04em;
   }
   .prompt-body {
     background: var(--paper);
-    padding: 24px 28px;
+    padding: 14px 18px;
     border-left: 2px solid var(--accent);
     font-family: var(--sans);
-    font-size: 14px;
-    line-height: 1.85;
+    font-size: 13px;
+    line-height: 1.75;
     color: var(--ink);
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-x: auto;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     border-radius: 0;
-    max-height: 320px;
+    max-height: 160px;
     overflow-y: auto;
   }
   .prompt-body::-webkit-scrollbar { width: 6px; height: 6px; }
   .prompt-body::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 3px; }
+
+  /* Fillable argument fields — click to edit, value gets substituted on copy */
+  .arg {
+    display: inline-block;
+    padding: 0 5px;
+    margin: 0 1px;
+    background: rgba(212, 175, 55, 0.14);
+    border-bottom: 1px dashed rgba(92, 122, 154, 0.55);
+    color: var(--ink);
+    font-style: normal;
+    cursor: text;
+    border-radius: 2px;
+    min-width: 1.5em;
+    transition: background 0.15s ease;
+  }
+  .arg:hover {
+    background: rgba(212, 175, 55, 0.28);
+  }
+  .arg:focus {
+    outline: none;
+    background: rgba(212, 175, 55, 0.34);
+    border-bottom-color: var(--accent);
+  }
+  .arg::before {
+    content: '✎';
+    font-size: 9px;
+    color: var(--ink-3);
+    margin-right: 3px;
+    vertical-align: middle;
+    opacity: 0.55;
+  }
+  .arg:focus::before {
+    opacity: 0;
+  }
 
   .tags {
     display: flex;
@@ -405,15 +439,15 @@
     .hero { padding: 80px 24px 48px; }
     .hero h1 { font-size: clamp(56px, 18vw, 88px); letter-spacing: 0.05em; }
     .nav { gap: 4px 16px; font-size: 13px; padding: 14px 16px; }
-    .entry { grid-template-columns: 56px 1fr; gap: 16px; }
-    .num { font-size: 32px; }
-    .chapter-head { gap: 20px; }
-    .chapter-han { font-size: 52px; }
-    .chapter-title .zh { font-size: 26px; }
-    .prompt-body { padding: 18px 20px; font-size: 13.5px; }
+    .entry { grid-template-columns: 44px 1fr; gap: 14px; }
+    .num { font-size: 26px; }
+    .chapter-head { gap: 18px; }
+    .chapter-han { font-size: 48px; }
+    .chapter-title .zh { font-size: 24px; }
+    .prompt-body { padding: 12px 14px; font-size: 12.5px; }
     .preview { max-width: 100%; }
-    main { padding: 0 20px; }
-    .entries { gap: 60px; }
+    main { padding: 0 16px; }
+    .entries { gap: 36px; }
   }
 </style>
 </head>
@@ -509,10 +543,34 @@
     }
   });
 
-  // Copy buttons
+  // Fillable args — Enter / Tab blurs the field, don't insert newlines
+  document.querySelectorAll('.arg').forEach(span => {
+    span.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === 'Tab') {
+        e.preventDefault();
+        span.blur();
+      }
+    });
+  });
+
+  // Helper: read prompt body text, substituting .arg edited values
+  function readPromptText(promptBody) {
+    const clone = promptBody.cloneNode(true);
+    // Replace each .arg span with its (possibly edited) text content
+    clone.querySelectorAll('.arg').forEach(span => {
+      const txt = (span.textContent || span.dataset.default || '').trim();
+      span.replaceWith(document.createTextNode(txt));
+    });
+    return clone.textContent || '';
+  }
+
+  // Copy buttons — read live content from sibling prompt-body (includes arg edits)
   document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const text = btn.getAttribute('data-prompt');
+      // Find the prompt-body in the same .body container
+      const body = btn.closest('.body');
+      const promptBody = body ? body.querySelector('.prompt-body') : null;
+      const text = promptBody ? readPromptText(promptBody) : btn.getAttribute('data-prompt');
       try {
         await navigator.clipboard.writeText(text);
         const orig = btn.textContent;
@@ -523,9 +581,10 @@
           btn.classList.remove('copied');
         }, 1800);
       } catch (err) {
-        // fallback for older browsers / file://
+        // fallback for older browsers / file:// — uses same live text
+        const fallback = text;
         const ta = document.createElement('textarea');
-        ta.value = text;
+        ta.value = fallback;
         ta.style.position = 'fixed';
         ta.style.opacity = '0';
         document.body.appendChild(ta);

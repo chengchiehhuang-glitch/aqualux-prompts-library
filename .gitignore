@@ -5,3 +5,4 @@ Icon?
 .claude/
 node_modules/
 *.log
+__pycache__/
