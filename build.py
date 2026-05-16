@@ -23,6 +23,15 @@ def render_prompt_card(p: dict, idx: int) -> str:
     desc_html = f'<p class="desc">{esc(p["description"])}</p>' if p.get('description') else ''
     src_label = '· bnext' if 'bnext' in (p.get('source', '') or '').lower() else ''
 
+    # Preview image (only if generated)
+    pid = p.get('id', '')
+    preview_html = ''
+    if pid and (ROOT / 'previews' / f'{pid}.webp').exists():
+        preview_html = f'''<div class="preview">
+      <img src="previews/{pid}.webp" alt="{esc(p['title'])} · 示範圖" loading="lazy" width="600" height="600">
+      <div class="preview-caption">示範圖 · GPT Image 2 生成</div>
+    </div>'''
+
     # Encode prompt for data-attribute (will be read by JS, not displayed via HTML)
     prompt_for_attr = html.escape(p['prompt'], quote=True)
 
@@ -31,6 +40,7 @@ def render_prompt_card(p: dict, idx: int) -> str:
   <div class="body">
     <h3 class="entry-title">{esc(p['title'])} <span class="src">{src_label}</span></h3>
     {desc_html}
+    {preview_html}
     <pre class="prompt-body">{esc(p['prompt'])}</pre>
     {tags_html}
     <div class="actions">
