@@ -1686,7 +1686,7 @@
       "category_zh": "生活實用",
       "category_en": "lifestyle",
       "description": "把多日行程做成雜誌跨頁設計，包含每日景點、交通、餐廳推薦。完整長版（含 Task 多步驟流程、雜誌風格改寫、海報生成）見原文。",
-      "prompt": "請幫我把【城市名】3 天 2 夜行程做成雜誌風格規劃表，包含每日景點、交通、餐廳推薦，畫面像旅遊雜誌跨頁設計。",
+      "prompt": "請幫我把【{argument name=\"城市名\" default=\"城市名\"}】{argument name=\"天數\" default=\"3 天 2 夜\"}行程做成{argument name=\"風格\" default=\"雜誌風格\"}規劃表，包含{argument name=\"內容\" default=\"每日景點、交通、餐廳推薦\"}，畫面像{argument name=\"設計\" default=\"旅遊雜誌跨頁設計\"}。",
       "tags": [
         "旅遊",
         "行程規劃",
@@ -1702,7 +1702,7 @@
       "category_zh": "生活實用",
       "category_en": "lifestyle",
       "description": "主角是編織風格可愛小人，背景含當地代表景點與美食，整體溫暖手作感，包含氣溫、天氣狀況與當日穿搭建議。完整公版（600 字）需填入城市，見原文。",
-      "prompt": "請幫我生成一張【城市名】今日天氣圖，主角是編織風格的可愛小人，背景包含當地代表景點與美食，整體風格溫暖手作感，包含氣溫、天氣狀況與當日穿搭建議。",
+      "prompt": "請幫我生成一張【{argument name=\"城市名\" default=\"城市名\"}】今日天氣圖，主角是{argument name=\"主角\" default=\"編織風格的可愛小人\"}，背景包含{argument name=\"背景元素1\" default=\"當地代表景點\"}與{argument name=\"背景元素2\" default=\"美食\"}，整體風格{argument name=\"風格\" default=\"溫暖手作感\"}，包含氣溫、天氣狀況與當日穿搭建議。",
       "tags": [
         "天氣",
         "編織風",
@@ -2052,7 +2052,7 @@
       "category_zh": "創意靈感 / Viral Meme",
       "category_en": "creative",
       "description": "超可愛寵物從巨大 Instagram 拍照框中走出，前腳伸向鏡頭、強烈透視與廣角效果，背景是陽光燦爛的夢幻花園小徑。",
-      "prompt": "超可愛【寵物】從巨大 Instagram 拍照框中走出來，前腳超近距離伸向鏡頭，帶有強烈透視感與廣角效果，露出開心微笑與吐舌表情。背景是陽光燦爛的夢幻花園小徑。",
+      "prompt": "超可愛【{argument name=\"寵物\" default=\"寵物\"}】從巨大 {argument name=\"道具\" default=\"Instagram 拍照框\"}中走出來，前腳超近距離伸向鏡頭，帶有強烈透視感與廣角效果，露出{argument name=\"表情\" default=\"開心微笑與吐舌表情\"}。背景是{argument name=\"背景\" default=\"陽光燦爛的夢幻花園小徑\"}。",
       "tags": [
         "寵物",
         "IG 框",

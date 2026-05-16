@@ -16,9 +16,15 @@ def esc(s: str) -> str:
 
 # Match {argument name="X" default="Y"} after HTML escaping (" → &quot;).
 # After html.escape, prompts have &quot; in place of ". JSON-format prompts
-# additionally escape " as \" → \&quot; (with backslash). Match both.
+# additionally escape " as \" → \&quot; (with backslash). Default values may
+# legitimately contain &amp; (escaped &), &lt;, &gt; — use negative lookahead
+# so we stop only at the actual closing &quot;.
 ARG_RE = re.compile(
-    r'\{argument\s+name=\\?&quot;([^&\\]+?)\\?&quot;\s+default=\\?&quot;([^&\\]*?)\\?&quot;\}'
+    r'\{argument\s+'
+    r'name=\\?&quot;((?:(?!\\?&quot;).)+?)\\?&quot;\s+'
+    r'default=\\?&quot;((?:(?!\\?&quot;).)*?)\\?&quot;'
+    r'\}',
+    re.DOTALL,
 )
 # Chinese full-width bracket placeholders like 【城市名】
 CN_BRACKET_RE = re.compile(r'【([^】\n]{1,20})】')

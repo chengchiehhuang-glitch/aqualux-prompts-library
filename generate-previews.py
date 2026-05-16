@@ -33,6 +33,18 @@ client = OpenAI()
 PREVIEWS_DIR = ROOT / "previews"
 PREVIEWS_DIR.mkdir(exist_ok=True)
 
+# Some prompts trip OpenAI safety filters (people-with-suggestive-context etc.).
+# Replace the prompt-text used for image generation only (does NOT modify the
+# prompt shown on the site, which is the actual artistic prompt).
+SAFETY_OVERRIDES = {
+    "p096": (
+        "A bright, warm sunset-lit Japanese high school classroom interior, "
+        "wooden desks and chairs arranged in rows, blackboard at the front, "
+        "warm golden hour light streaming through tall windows, soft anime "
+        "illustration style, no people, nostalgic atmosphere."
+    ),
+}
+
 # 30 featured IDs spread across categories + viral hits
 FEATURED_IDS = {
     # avatar (3)
@@ -102,10 +114,14 @@ def generate_one(item: dict) -> tuple[str, str | None, str | None]:
     if out_path.exists():
         return (pid, str(out_path), "skipped (exists)")
 
-    prompt_text = clean_prompt(item["prompt"])
-    if not prompt_text or len(prompt_text) < 10:
-        # Fall back to title + description if prompt is too thin after cleaning
-        prompt_text = f"{item['title']}. {item.get('description', '')}"
+    # Allow safety-conscious override for known-rejected prompts
+    if pid in SAFETY_OVERRIDES:
+        prompt_text = SAFETY_OVERRIDES[pid]
+    else:
+        prompt_text = clean_prompt(item["prompt"])
+        if not prompt_text or len(prompt_text) < 10:
+            # Fall back to title + description if prompt is too thin after cleaning
+            prompt_text = f"{item['title']}. {item.get('description', '')}"
 
     try:
         resp = client.images.generate(

@@ -52,12 +52,22 @@ def parse_args():
         default=None,
         help="Only call the model for the first N prompts that need augmentation.",
     )
+    parser.add_argument(
+        "--include-bracket",
+        action="store_true",
+        help="Also augment prompts that already contain 【】 brackets (adds extra {argument} fields alongside).",
+    )
     return parser.parse_args()
 
 
-def should_skip(prompt):
+def should_skip(prompt, include_bracket=False):
     stripped = prompt.lstrip()
-    if "{argument" in prompt or "【" in prompt:
+    # {argument means already augmented — skip
+    if "{argument" in prompt:
+        return "template"
+    # 【】 brackets are recognized by build.py as fillable. With --include-bracket
+    # we ALSO let augment add more {argument} fields around them (they coexist).
+    if "【" in prompt and not include_bracket:
         return "template"
     if stripped.startswith("{"):
         return "json"
@@ -138,7 +148,7 @@ def main():
     targets = []
     for index, entry in enumerate(prompts):
         prompt = entry.get("prompt", "")
-        skip_reason = should_skip(prompt)
+        skip_reason = should_skip(prompt, include_bracket=args.include_bracket)
         if skip_reason == "template":
             stats["template_skip"] += 1
             continue
